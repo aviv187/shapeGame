@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import './shapePainter.dart';
 import '../models/gravityEnum.dart';
+import '../models/makeIntToSize.dart';
 
 class BoardTile extends StatefulWidget {
   final int sides;
-  final int size;
+  final double size;
   final double topPosition;
   final double leftPosition;
   final Color color;
@@ -70,28 +71,15 @@ class _BoardTileState extends State<BoardTile> {
                       shapeAngle: shapeAngle,
                       sides: 3,
                     ),
-                    child: GameButton(widget.removeTile),
+                    child: FlatButton(
+                      onPressed: () {
+                        widget.removeTile();
+                      },
+                      child: null,
+                    ),
                   )),
       ),
       duration: Duration(milliseconds: 300),
-    );
-  }
-}
-
-class GameButton extends StatelessWidget {
-  final Function removeTile;
-
-  GameButton(this.removeTile);
-
-  @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: (removeTile != null)
-          ? () {
-              removeTile();
-            }
-          : null,
-      child: null,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shapeGame/models/makeIntToSize.dart';
 
 import './BoardTile.dart';
 import '../models/tileModel.dart';
@@ -10,11 +11,13 @@ import '../models/gravityEnum.dart';
 class BoardTiles extends StatefulWidget {
   final int sides;
   final List<Tile> tileList;
-  final int tileSize;
+  final double tileSize;
   final int colNum;
   final int rowNum;
+  final Function changeScore;
 
   BoardTiles({
+    @required this.changeScore,
     @required this.sides,
     @required this.tileList,
     @required this.tileSize,
@@ -151,7 +154,7 @@ class _BoardTilesState extends State<BoardTiles> {
         final int nextTilePosition =
             findTilePosition(tile.topPosition, tile.leftPosition + 1);
 
-        if (tile.leftPosition < 7) {
+        if (tile.leftPosition < widget.colNum - 1) {
           checkIfCanMove(
               gravity: gravity,
               tile: tile,
@@ -222,6 +225,11 @@ class _BoardTilesState extends State<BoardTiles> {
 
     checkNearTiles(tile);
 
+    final int tilesTRN = tilesToRemove.length;
+
+    widget.changeScore(
+        (tilesTRN == 1) ? -5 : (tilesTRN * tilesTRN * 0.8).floor());
+
     tilesToRemove.forEach((tileTR) {
       widget.tileList[tileTR['int']].occupied = false;
       setState(() {
@@ -291,9 +299,9 @@ class _BoardTilesState extends State<BoardTiles> {
           size: widget.tileSize,
           color: tile.color,
           topPosition:
-              widget.tileSize / 2 + tile.topPosition * 1.63 * widget.tileSize,
+              makeTileIntToSizeForPaint(tile.topPosition, widget.tileSize),
           leftPosition:
-              widget.tileSize / 2 + tile.leftPosition * 1.63 * widget.tileSize,
+              makeTileIntToSizeForPaint(tile.leftPosition, widget.tileSize),
           removeTile: () => removeTile(tile),
           gravity: tile.gravity,
         );
