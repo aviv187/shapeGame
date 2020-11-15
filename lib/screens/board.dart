@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shapeGame/widgets/BoardTiles.dart';
 
 import '../widgets/BoardTile.dart';
@@ -106,7 +107,15 @@ class _BoardState extends State<Board> {
                 // game over buttom
                 gameOver
                     ? GameOverButton(
-                        restartGame: () {},
+                        restartGame: () {
+                          HapticFeedback.heavyImpact();
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              fullscreenDialog: true,
+                              builder: (context) => Board(),
+                            ),
+                          );
+                        },
                         gameScore: score.toString(),
                       )
                     : Container(),

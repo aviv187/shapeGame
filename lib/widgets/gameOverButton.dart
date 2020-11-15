@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../helpers/database.dart';
 
@@ -34,35 +35,48 @@ class _GameOverButtonState extends State<GameOverButton> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 80),
-          Text(
-            'GameOver',
-            style: TextStyle(
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-              color: Colors.red.shade600,
-            ),
+          Stack(
+            children: <Widget>[
+              // Stroked text as border.
+              Text(
+                'GameOver',
+                style: TextStyle(
+                  fontSize: 50,
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 3
+                    ..color = Colors.black,
+                ),
+              ),
+              // Solid text as fill.
+              Text(
+                'GameOver',
+                style: TextStyle(
+                  fontSize: 50,
+                  color: Colors.red[600],
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 20),
           FlatButton(
             padding: EdgeInsets.all(0),
-            highlightColor: Colors.blueGrey,
+            highlightColor: Colors.white,
             child: Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                color: Colors.blueGrey.withOpacity(0.75),
+                color: Colors.white.withOpacity(0.7),
               ),
               child: Text(
                 'Play Again',
                 style: TextStyle(
                   fontSize: 25,
-                  color: Colors.white,
                 ),
               ),
             ),
             onPressed: () async {
-              // Navigator.pop(context);
-
+              widget.restartGame();
               canSave = false;
             },
           ),
@@ -72,12 +86,13 @@ class _GameOverButtonState extends State<GameOverButton> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
+              color: Colors.white,
             ),
           ),
           SizedBox(height: 20),
           Container(
             width: 180,
-            child: TextFormField(
+            child: TextField(
               controller: _textEditingController,
               decoration: InputDecoration(
                 labelText: 'Enter your Name',
@@ -87,15 +102,23 @@ class _GameOverButtonState extends State<GameOverButton> {
                   ),
                 ),
                 labelStyle: TextStyle(
-                  color: Colors.black.withOpacity(0.8),
+                  color: Colors.white.withOpacity(0.8),
                 ),
               ),
             ),
           ),
           FlatButton(
-            child: Text('Save Score'),
+            child: Text(
+              'Save Score',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15,
+              ),
+            ),
             onPressed: canSave
                 ? () async {
+                    HapticFeedback.heavyImpact();
+
                     if (_textEditingController.text == '') {
                       _insert('player', widget.gameScore);
                     } else {
