@@ -139,12 +139,14 @@ class _BoardTilesState extends State<BoardTiles> {
   }
 
   void checkNextTile(Tile tile, Gravity gravity) {
+    canTheTilesbePressed = true;
+
     switch (gravity) {
       case Gravity.top:
-        final int nextTilePosition =
-            findTilePosition(tile.topPosition - 1, tile.leftPosition);
+        if (tile.topPosition > 0) {
+          final int nextTilePosition =
+              findTilePosition(tile.topPosition - 1, tile.leftPosition);
 
-        if (nextTilePosition >= 0) {
           checkIfCanMove(
               gravity: gravity,
               tile: tile,
@@ -155,10 +157,10 @@ class _BoardTilesState extends State<BoardTiles> {
         }
         break;
       case Gravity.right:
-        final int nextTilePosition =
-            findTilePosition(tile.topPosition, tile.leftPosition + 1);
-
         if (tile.leftPosition < widget.colNum - 1) {
+          final int nextTilePosition =
+              findTilePosition(tile.topPosition, tile.leftPosition + 1);
+
           checkIfCanMove(
               gravity: gravity,
               tile: tile,
@@ -169,10 +171,10 @@ class _BoardTilesState extends State<BoardTiles> {
         }
         break;
       case Gravity.bottom:
-        final int nextTilePosition =
-            findTilePosition(tile.topPosition + 1, tile.leftPosition);
+        if (tile.topPosition < widget.rowNum - 1) {
+          final int nextTilePosition =
+              findTilePosition(tile.topPosition + 1, tile.leftPosition);
 
-        if (nextTilePosition <= (widget.colNum * widget.rowNum) - 1) {
           checkIfCanMove(
               gravity: gravity,
               tile: tile,
@@ -183,10 +185,10 @@ class _BoardTilesState extends State<BoardTiles> {
         }
         break;
       case Gravity.left:
-        final int nextTilePosition =
-            findTilePosition(tile.topPosition, tile.leftPosition - 1);
-
         if (tile.leftPosition > 0) {
+          final int nextTilePosition =
+              findTilePosition(tile.topPosition, tile.leftPosition - 1);
+
           checkIfCanMove(
               gravity: gravity,
               tile: tile,
@@ -205,9 +207,13 @@ class _BoardTilesState extends State<BoardTiles> {
     final int tilePosition =
         findTilePosition(tile.topPosition, tile.leftPosition);
 
+    //check if the next tile is open
     if (!widget.tileList[nextTilePosition].occupied) {
+      canTheTilesbePressed = false;
+
       widget.tileList[tilePosition].occupied = false;
       widget.tileList[nextTilePosition].occupied = true;
+
       moveTimer = Timer(Duration(milliseconds: 100), () {
         if (mounted) {
           setState(() {
@@ -244,8 +250,6 @@ class _BoardTilesState extends State<BoardTiles> {
         });
 
         tilesToRemove = [];
-
-        canTheTilesbePressed = true;
 
         if (activeTileList.isEmpty) {
           widget.gameOverFunc();
