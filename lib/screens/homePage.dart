@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './board.dart';
+import './scorePage.dart';
 
 class MyHomePage extends StatelessWidget {
   @override

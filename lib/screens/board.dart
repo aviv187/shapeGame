@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shapeGame/widgets/BoardTiles.dart';
 
 import '../widgets/BoardTile.dart';
-import '../models/tileModel.dart';
-import '../models/makeIntToSize.dart';
+import '../helpers/tileModel.dart';
+import '../helpers/makeIntToSize.dart';
+import '../widgets/gameOverButton.dart';
 
 class Board extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class _BoardState extends State<Board> {
   final List<Tile> tileList = [];
 
   int score = 0;
+  bool gameOver = false;
 
   void makeTileList(List<Tile> list) {
     for (int i = 0; i < 14; i++) {
@@ -33,6 +35,12 @@ class _BoardState extends State<Board> {
   void changeScore(int points) {
     setState(() {
       score = score + points;
+    });
+  }
+
+  void gameOverFunc() {
+    setState(() {
+      gameOver = true;
     });
   }
 
@@ -71,6 +79,7 @@ class _BoardState extends State<Board> {
             ),
             child: Stack(
               children: [
+                // draw the board
                 Stack(
                   children: tileList.map((Tile tile) {
                     return BoardTile(
@@ -84,6 +93,7 @@ class _BoardState extends State<Board> {
                     );
                   }).toList(),
                 ),
+                // draw all the moving tile
                 BoardTiles(
                   sides: 4,
                   tileList: tileList,
@@ -91,7 +101,15 @@ class _BoardState extends State<Board> {
                   colNum: 9,
                   rowNum: 14,
                   changeScore: changeScore,
+                  gameOverFunc: gameOverFunc,
                 ),
+                // game over buttom
+                gameOver
+                    ? GameOverButton(
+                        restartGame: () {},
+                        gameScore: score.toString(),
+                      )
+                    : Container(),
               ],
             ),
           ))

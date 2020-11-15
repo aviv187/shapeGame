@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './shapePainter.dart';
-import '../models/gravityEnum.dart';
-import '../models/makeIntToSize.dart';
+import '../helpers/gravityEnum.dart';
 
 class BoardTile extends StatefulWidget {
   final int sides;

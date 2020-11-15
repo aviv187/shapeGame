@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:shapeGame/models/makeIntToSize.dart';
 
 import './BoardTile.dart';
-import '../models/tileModel.dart';
-import '../models/gravityEnum.dart';
+import '../helpers/tileModel.dart';
+import '../helpers/gravityEnum.dart';
+import '../helpers/makeIntToSize.dart';
 
 class BoardTiles extends StatefulWidget {
   final int sides;
@@ -15,6 +15,7 @@ class BoardTiles extends StatefulWidget {
   final int colNum;
   final int rowNum;
   final Function changeScore;
+  final Function gameOverFunc;
 
   BoardTiles({
     @required this.changeScore,
@@ -23,6 +24,7 @@ class BoardTiles extends StatefulWidget {
     @required this.tileSize,
     @required this.colNum,
     @required this.rowNum,
+    @required this.gameOverFunc,
   });
 
   @override
@@ -34,6 +36,8 @@ class _BoardTilesState extends State<BoardTiles> {
   List<Map<String, dynamic>> tilesToRemove = [];
 
   Timer moveTimer;
+
+  bool canTheTilesbePressed = true;
 
   @override
   void initState() {
@@ -217,29 +221,39 @@ class _BoardTilesState extends State<BoardTiles> {
   }
 
   void removeTile(Tile tile) {
-    final int tilePosition =
-        findTilePosition(tile.topPosition, tile.leftPosition);
+    if (canTheTilesbePressed) {
+      canTheTilesbePressed = false;
 
-    tilesToRemove.add({'tile': tile, 'int': tilePosition});
-    tile.inRemoveList = true;
+      final int tilePosition =
+          findTilePosition(tile.topPosition, tile.leftPosition);
 
-    checkNearTiles(tile);
+      tilesToRemove.add({'tile': tile, 'int': tilePosition});
+      tile.inRemoveList = true;
 
-    final int tilesTRN = tilesToRemove.length;
+      checkNearTiles(tile);
 
-    widget.changeScore(
-        (tilesTRN == 1) ? -5 : (tilesTRN * tilesTRN * 0.8).floor());
+      final int tilesTRN = tilesToRemove.length;
 
-    tilesToRemove.forEach((tileTR) {
-      widget.tileList[tileTR['int']].occupied = false;
-      setState(() {
-        activeTileList.remove(tileTR['tile']);
+      widget.changeScore(
+          (tilesTRN == 1) ? -5 : (tilesTRN * tilesTRN * 0.8).floor());
+
+      tilesToRemove.forEach((tileTR) {
+        widget.tileList[tileTR['int']].occupied = false;
+        setState(() {
+          activeTileList.remove(tileTR['tile']);
+        });
+
+        tilesToRemove = [];
+
+        canTheTilesbePressed = true;
+
+        if (activeTileList.isEmpty) {
+          widget.gameOverFunc();
+        }
       });
 
-      tilesToRemove = [];
-    });
-
-    sortAndStartMovigList(tile.gravity);
+      sortAndStartMovigList(tile.gravity);
+    }
   }
 
   void checkNearTiles(Tile tile) {
