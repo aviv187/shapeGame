@@ -35,8 +35,6 @@ class _BoardTilesState extends State<BoardTiles> {
   List<Tile> activeTileList = [];
   List<Map<String, dynamic>> tilesToRemove = [];
 
-  Timer moveTimer;
-
   bool canTheTilesbePressed = true;
 
   @override
@@ -44,12 +42,6 @@ class _BoardTilesState extends State<BoardTiles> {
     super.initState();
 
     makeBoard();
-  }
-
-  @override
-  void dispose() {
-    moveTimer?.cancel();
-    super.dispose();
   }
 
   void makeBoard() {
@@ -141,65 +133,51 @@ class _BoardTilesState extends State<BoardTiles> {
   void checkNextTile(Tile tile, Gravity gravity) {
     canTheTilesbePressed = true;
 
+    int nextTopP = tile.topPosition;
+    int nextLeftP = tile.leftPosition;
+
     switch (gravity) {
       case Gravity.top:
         if (tile.topPosition > 0) {
-          final int nextTilePosition =
-              findTilePosition(tile.topPosition - 1, tile.leftPosition);
-
-          checkIfCanMove(
-              gravity: gravity,
-              tile: tile,
-              nextTilePosition: nextTilePosition,
-              moveTile: () {
-                tile.topPosition--;
-              });
+          nextTopP--;
+        } else {
+          return;
         }
         break;
       case Gravity.right:
         if (tile.leftPosition < widget.colNum - 1) {
-          final int nextTilePosition =
-              findTilePosition(tile.topPosition, tile.leftPosition + 1);
-
-          checkIfCanMove(
-              gravity: gravity,
-              tile: tile,
-              nextTilePosition: nextTilePosition,
-              moveTile: () {
-                tile.leftPosition++;
-              });
+          nextLeftP++;
+        } else {
+          return;
         }
         break;
       case Gravity.bottom:
         if (tile.topPosition < widget.rowNum - 1) {
-          final int nextTilePosition =
-              findTilePosition(tile.topPosition + 1, tile.leftPosition);
-
-          checkIfCanMove(
-              gravity: gravity,
-              tile: tile,
-              nextTilePosition: nextTilePosition,
-              moveTile: () {
-                tile.topPosition++;
-              });
+          nextTopP++;
+        } else {
+          return;
         }
         break;
       case Gravity.left:
         if (tile.leftPosition > 0) {
-          final int nextTilePosition =
-              findTilePosition(tile.topPosition, tile.leftPosition - 1);
-
-          checkIfCanMove(
-              gravity: gravity,
-              tile: tile,
-              nextTilePosition: nextTilePosition,
-              moveTile: () {
-                tile.leftPosition--;
-              });
+          nextLeftP--;
+        } else {
+          return;
         }
         break;
       default:
     }
+
+    final int nextTilePosition = findTilePosition(nextTopP, nextLeftP);
+
+    checkIfCanMove(
+        gravity: gravity,
+        tile: tile,
+        nextTilePosition: nextTilePosition,
+        moveTile: () {
+          tile.topPosition = nextTopP;
+          tile.leftPosition = nextLeftP;
+        });
   }
 
   void checkIfCanMove(
@@ -214,15 +192,13 @@ class _BoardTilesState extends State<BoardTiles> {
       widget.tileList[tilePosition].occupied = false;
       widget.tileList[nextTilePosition].occupied = true;
 
-      moveTimer = Timer(Duration(milliseconds: 100), () {
-        if (mounted) {
-          setState(() {
-            moveTile();
-          });
-        }
+      if (mounted) {
+        setState(() {
+          moveTile();
+        });
+      }
 
-        checkNextTile(tile, gravity);
-      });
+      checkNextTile(tile, gravity);
     }
   }
 

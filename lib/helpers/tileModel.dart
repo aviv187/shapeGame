@@ -14,7 +14,7 @@ class Tile {
     this.gravity,
     this.inRemoveList,
     @required this.key,
-    @required this.color,
+    this.color,
     @required this.leftPosition,
     @required this.topPosition,
     this.occupied = false,

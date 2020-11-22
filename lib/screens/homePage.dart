@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './board.dart';
 import './scorePage.dart';
+import 'boardPageDraw.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -17,7 +17,7 @@ class MyHomePage extends StatelessWidget {
             children: <Widget>[
               HomePageButton(
                 text: 'Start',
-                page: Board(),
+                page: BoardDraw(),
               ),
               HomePageButton(
                 page: ScorePage(),
