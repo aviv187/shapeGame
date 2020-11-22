@@ -30,6 +30,20 @@ class BoardTile extends StatefulWidget {
 class _BoardTileState extends State<BoardTile> {
   double shapeAngle;
 
+  int duration = 1000;
+
+  @override
+  void didUpdateWidget(BoardTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.topPosition != widget.topPosition) {
+      duration = (oldWidget.topPosition - widget.topPosition).abs().round() * 5;
+    }
+    if (oldWidget.leftPosition != widget.leftPosition) {
+      duration =
+          (oldWidget.leftPosition - widget.leftPosition).abs().round() * 5;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (widget.gravity) {
@@ -78,7 +92,7 @@ class _BoardTileState extends State<BoardTile> {
                     ),
                   )),
       ),
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: duration),
     );
   }
 }

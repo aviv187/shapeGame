@@ -129,8 +129,6 @@ class _BoardTilesState extends State<BoardTiles> {
     activeTileList.forEach((tile) {
       checkTileNextPosition(tile, gravity);
     });
-
-    canTheTilesbePressed = true;
   }
 
   void checkTileNextPosition(Tile tile, Gravity gravity) {
@@ -235,6 +233,7 @@ class _BoardTilesState extends State<BoardTiles> {
       });
 
       startMovigTiles(tile.gravity);
+      canTheTilesbePressed = true;
     }
   }
 
