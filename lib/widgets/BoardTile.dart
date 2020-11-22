@@ -31,18 +31,6 @@ class _BoardTileState extends State<BoardTile> {
   double shapeAngle;
 
   @override
-  void didUpdateWidget(BoardTile oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print('-------');
-    if (oldWidget.topPosition != widget.topPosition) {
-      print(widget.topPosition);
-    }
-    if (oldWidget.leftPosition != widget.leftPosition) {
-      print(widget.topPosition);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     switch (widget.gravity) {
       case Gravity.top:
@@ -90,7 +78,7 @@ class _BoardTileState extends State<BoardTile> {
                     ),
                   )),
       ),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 1000),
     );
   }
 }

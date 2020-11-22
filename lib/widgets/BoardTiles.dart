@@ -101,7 +101,7 @@ class _BoardTilesState extends State<BoardTiles> {
     });
   }
 
-  void sortAndStartMovigList(Gravity gravity) {
+  void startMovigTiles(Gravity gravity) {
     switch (gravity) {
       case Gravity.top:
         activeTileList.sort((a, b) {
@@ -125,80 +125,82 @@ class _BoardTilesState extends State<BoardTiles> {
         break;
       default:
     }
+
     activeTileList.forEach((tile) {
-      checkNextTile(tile, gravity);
+      checkTileNextPosition(tile, gravity);
     });
+
+    canTheTilesbePressed = true;
   }
 
-  void checkNextTile(Tile tile, Gravity gravity) {
-    canTheTilesbePressed = true;
-
+  void checkTileNextPosition(Tile tile, Gravity gravity) {
     int nextTopP = tile.topPosition;
     int nextLeftP = tile.leftPosition;
 
     switch (gravity) {
       case Gravity.top:
-        if (tile.topPosition > 0) {
-          nextTopP--;
-        } else {
-          return;
-        }
+        widget.tileList.forEach((element) {
+          if (tile.leftPosition == element.leftPosition &&
+              element.occupied == false &&
+              tile.topPosition > element.topPosition) {
+            nextTopP--;
+          }
+        });
         break;
       case Gravity.right:
-        if (tile.leftPosition < widget.colNum - 1) {
-          nextLeftP++;
-        } else {
-          return;
-        }
+        widget.tileList.forEach((element) {
+          if (tile.topPosition == element.topPosition &&
+              element.occupied == false &&
+              tile.leftPosition < element.leftPosition) {
+            nextLeftP++;
+          }
+        });
         break;
       case Gravity.bottom:
-        if (tile.topPosition < widget.rowNum - 1) {
-          nextTopP++;
-        } else {
-          return;
-        }
+        widget.tileList.forEach((element) {
+          if (tile.leftPosition == element.leftPosition &&
+              element.occupied == false &&
+              tile.topPosition < element.topPosition) {
+            nextTopP++;
+          }
+        });
         break;
       case Gravity.left:
-        if (tile.leftPosition > 0) {
-          nextLeftP--;
-        } else {
-          return;
-        }
+        widget.tileList.forEach((element) {
+          if (tile.topPosition == element.topPosition &&
+              element.occupied == false &&
+              tile.leftPosition > element.leftPosition) {
+            nextLeftP--;
+          }
+        });
         break;
       default:
     }
 
     final int nextTilePosition = findTilePosition(nextTopP, nextLeftP);
 
-    checkIfCanMove(
-        gravity: gravity,
-        tile: tile,
-        nextTilePosition: nextTilePosition,
-        moveTile: () {
-          tile.topPosition = nextTopP;
-          tile.leftPosition = nextLeftP;
-        });
+    if (nextTopP != tile.topPosition || nextLeftP != tile.leftPosition) {
+      moveTile(
+          tile: tile,
+          nextTilePosition: nextTilePosition,
+          moveTile: () {
+            tile.topPosition = nextTopP;
+            tile.leftPosition = nextLeftP;
+          });
+    }
   }
 
-  void checkIfCanMove(
-      {Tile tile, int nextTilePosition, Function moveTile, Gravity gravity}) {
+  void moveTile({Tile tile, int nextTilePosition, Function moveTile}) {
     final int tilePosition =
         findTilePosition(tile.topPosition, tile.leftPosition);
 
-    //check if the next tile is open
-    if (!widget.tileList[nextTilePosition].occupied) {
-      canTheTilesbePressed = false;
+    widget.tileList[tilePosition].occupied = false;
+    widget.tileList[nextTilePosition].occupied = true;
 
-      widget.tileList[tilePosition].occupied = false;
-      widget.tileList[nextTilePosition].occupied = true;
-
-      if (mounted) {
-        setState(() {
-          moveTile();
-        });
-      }
-
-      checkNextTile(tile, gravity);
+    if (mounted) {
+      setState(() {
+        moveTile();
+      });
     }
   }
 
@@ -232,7 +234,7 @@ class _BoardTilesState extends State<BoardTiles> {
         }
       });
 
-      sortAndStartMovigList(tile.gravity);
+      startMovigTiles(tile.gravity);
     }
   }
 
