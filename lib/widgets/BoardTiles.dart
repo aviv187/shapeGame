@@ -137,40 +137,36 @@ class _BoardTilesState extends State<BoardTiles> {
 
     switch (gravity) {
       case Gravity.top:
-        widget.tileList.forEach((element) {
-          if (tile.leftPosition == element.leftPosition &&
-              element.occupied == false &&
-              tile.topPosition > element.topPosition) {
+        for (int i = 0; i < tile.topPosition; i++) {
+          int tileInt = findTilePosition(i, tile.leftPosition);
+          if (!widget.tileList[tileInt].occupied) {
             nextTopP--;
           }
-        });
+        }
         break;
       case Gravity.right:
-        widget.tileList.forEach((element) {
-          if (tile.topPosition == element.topPosition &&
-              element.occupied == false &&
-              tile.leftPosition < element.leftPosition) {
+        for (int i = widget.colNum - 1; i > tile.leftPosition; i--) {
+          int tileInt = findTilePosition(tile.topPosition, i);
+          if (!widget.tileList[tileInt].occupied) {
             nextLeftP++;
           }
-        });
+        }
         break;
       case Gravity.bottom:
-        widget.tileList.forEach((element) {
-          if (tile.leftPosition == element.leftPosition &&
-              element.occupied == false &&
-              tile.topPosition < element.topPosition) {
+        for (int i = widget.rowNum - 1; i > tile.topPosition; i--) {
+          int tileInt = findTilePosition(i, tile.leftPosition);
+          if (!widget.tileList[tileInt].occupied) {
             nextTopP++;
           }
-        });
+        }
         break;
       case Gravity.left:
-        widget.tileList.forEach((element) {
-          if (tile.topPosition == element.topPosition &&
-              element.occupied == false &&
-              tile.leftPosition > element.leftPosition) {
+        for (int i = 0; i < tile.leftPosition; i++) {
+          int tileInt = findTilePosition(tile.topPosition, i);
+          if (!widget.tileList[tileInt].occupied) {
             nextLeftP--;
           }
-        });
+        }
         break;
       default:
     }
@@ -279,6 +275,7 @@ class _BoardTilesState extends State<BoardTiles> {
     });
   }
 
+  // from the not active list
   int findTilePosition(int topPosition, int leftPosition) {
     return widget.colNum * (topPosition + 1) - widget.colNum + leftPosition;
   }

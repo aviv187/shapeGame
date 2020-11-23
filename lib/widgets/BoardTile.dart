@@ -36,11 +36,11 @@ class _BoardTileState extends State<BoardTile> {
   void didUpdateWidget(BoardTile oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.topPosition != widget.topPosition) {
-      duration = (oldWidget.topPosition - widget.topPosition).abs().round() * 5;
+      duration = (oldWidget.topPosition - widget.topPosition).abs().round() * 4;
     }
     if (oldWidget.leftPosition != widget.leftPosition) {
       duration =
-          (oldWidget.leftPosition - widget.leftPosition).abs().round() * 5;
+          (oldWidget.leftPosition - widget.leftPosition).abs().round() * 4;
     }
   }
 

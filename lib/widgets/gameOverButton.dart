@@ -111,10 +111,11 @@ class _GameOverButtonState extends State<GameOverButton> {
             child: Text(
               'Save Score',
               style: TextStyle(
-                color: Colors.white,
                 fontSize: 15,
               ),
             ),
+            color: Colors.white.withOpacity(0.75),
+            disabledColor: Colors.white.withOpacity(0.5),
             onPressed: canSave
                 ? () async {
                     HapticFeedback.heavyImpact();
