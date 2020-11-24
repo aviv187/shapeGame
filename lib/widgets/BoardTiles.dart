@@ -137,34 +137,42 @@ class _BoardTilesState extends State<BoardTiles> {
 
     switch (gravity) {
       case Gravity.top:
-        for (int i = 0; i < tile.topPosition; i++) {
+        for (int i = tile.topPosition - 1; i >= 0; i--) {
           int tileInt = findTilePosition(i, tile.leftPosition);
           if (!widget.tileList[tileInt].occupied) {
             nextTopP--;
+          } else {
+            i = -1;
           }
         }
         break;
       case Gravity.right:
-        for (int i = widget.colNum - 1; i > tile.leftPosition; i--) {
+        for (int i = tile.leftPosition + 1; i < widget.colNum; i++) {
           int tileInt = findTilePosition(tile.topPosition, i);
           if (!widget.tileList[tileInt].occupied) {
             nextLeftP++;
+          } else {
+            i = widget.colNum;
           }
         }
         break;
       case Gravity.bottom:
-        for (int i = widget.rowNum - 1; i > tile.topPosition; i--) {
+        for (int i = tile.topPosition + 1; i < widget.rowNum; i++) {
           int tileInt = findTilePosition(i, tile.leftPosition);
           if (!widget.tileList[tileInt].occupied) {
             nextTopP++;
+          } else {
+            i = widget.rowNum;
           }
         }
         break;
       case Gravity.left:
-        for (int i = 0; i < tile.leftPosition; i++) {
+        for (int i = tile.leftPosition - 1; i >= 0; i--) {
           int tileInt = findTilePosition(tile.topPosition, i);
           if (!widget.tileList[tileInt].occupied) {
             nextLeftP--;
+          } else {
+            i = -1;
           }
         }
         break;
