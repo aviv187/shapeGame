@@ -228,13 +228,13 @@ class _BoardTilesState extends State<BoardTiles> {
         setState(() {
           activeTileList.remove(tileTR['tile']);
         });
-
-        tilesToRemove = [];
-
-        if (activeTileList.isEmpty) {
-          widget.gameOverFunc();
-        }
       });
+
+      tilesToRemove = [];
+
+      if (activeTileList.isEmpty) {
+        widget.gameOverFunc();
+      }
 
       startMovigTiles(tile.gravity);
       canTheTilesbePressed = true;

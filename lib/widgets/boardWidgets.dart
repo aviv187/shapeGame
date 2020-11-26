@@ -51,7 +51,7 @@ class _BoardWidgetsState extends State<BoardWidgets> {
       Center(
           child: Container(
         width: widget.boardWidth,
-        height: widget.boardWidth * 1.55,
+        height: widget.boardWidth * 1.25,
         decoration: BoxDecoration(
           color: Colors.transparent,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

@@ -7,7 +7,7 @@ import '../widgets/boardWidgets.dart';
 
 class BoardDraw extends StatelessWidget {
   final int colNum = 9;
-  final int rowNum = 14;
+  final int rowNum = 11;
 
   final List<Tile> tileList = [];
 
@@ -61,7 +61,7 @@ class BoardDraw extends StatelessWidget {
                     Center(
                         child: Container(
                       width: boardWidth,
-                      height: boardWidth * 1.55,
+                      height: boardWidth * 1.25,
                       decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
