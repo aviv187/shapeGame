@@ -43,53 +43,55 @@ class _BoardWidgetsState extends State<BoardWidgets> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Container(
-        height: 35,
-        child: Center(child: Text('Score: $score')),
-      ),
-      Center(
-          child: Container(
-        width: widget.boardWidth,
-        height: widget.boardWidth * 1.25,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          border: Border.all(
-            width: 3,
-            color: Colors.grey[700],
-          ),
+    return Column(
+      children: <Widget>[
+        Container(
+          height: 35,
+          child: Center(child: Text('Score: $score')),
         ),
-        child: Stack(
-          children: [
-            // draw all the moving tile
-            BoardTiles(
-              sides: 4,
-              tileList: widget.tileList,
-              tileSize: widget.tileSize,
-              colNum: widget.colNum,
-              rowNum: widget.rowNum,
-              changeScore: changeScore,
-              gameOverFunc: gameOverFunc,
+        Center(
+            child: Container(
+          width: widget.boardWidth,
+          height: widget.boardWidth * 1.25,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            border: Border.all(
+              width: 3,
+              color: Colors.grey[700],
             ),
-            // game over buttom
-            gameOver
-                ? GameOverButton(
-                    restartGame: () {
-                      HapticFeedback.heavyImpact();
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (context) => BoardDraw(),
-                        ),
-                      );
-                    },
-                    gameScore: score.toString(),
-                  )
-                : Container(),
-          ],
-        ),
-      ))
-    ]);
+          ),
+          child: Stack(
+            children: [
+              // draw all the moving tile
+              BoardTiles(
+                sides: 4,
+                tileList: widget.tileList,
+                tileSize: widget.tileSize,
+                colNum: widget.colNum,
+                rowNum: widget.rowNum,
+                changeScore: changeScore,
+                gameOverFunc: gameOverFunc,
+              ),
+              // game over buttom
+              gameOver
+                  ? GameOverButton(
+                      restartGame: () {
+                        HapticFeedback.heavyImpact();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (context) => BoardDraw(),
+                          ),
+                        );
+                      },
+                      gameScore: score.toString(),
+                    )
+                  : Container(),
+            ],
+          ),
+        )),
+      ],
+    );
   }
 }

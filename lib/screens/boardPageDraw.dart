@@ -6,8 +6,8 @@ import '../widgets/BoardTile.dart';
 import '../widgets/boardWidgets.dart';
 
 class BoardDraw extends StatelessWidget {
-  final int colNum = 9;
-  final int rowNum = 11;
+  final int colNum = 8;
+  final int rowNum = 10;
 
   final List<Tile> tileList = [];
 
